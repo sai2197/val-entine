@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Temporary Valentine 🌸</title>
+
+<style>
+:root{
+  --bg-dark:#1f1b22;
+  --blush1:#ffd6e5;
+  --blush2:#ffb3cc;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,sans-serif;}
+
+@media (max-width:768px){
+  body{
+    background:linear-gradient(145deg,var(--blush1),var(--blush2));
+  }
+
+  .wrapper{
+    max-width:100%;
+    padding:40px 20px;
+  }
+}
+
+body{
+  background:var(--bg-dark);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+/* INTRO */
+.intro{
+  position:absolute;
+  font-size:3rem;
+  font-weight:600;
+  color:white;
+  opacity:0;
+  z-index:20;
+  text-align:center;
+}
+
+.fadeIn{animation:fadeIn .5s forwards;}
+.fadeOut{animation:fadeOut .5s forwards;}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+
+/* WRAPPER */
+.wrapper{
+  width:100%;
+  max-width:768px;
+  min-height:100vh;
+  background:linear-gradient(145deg,var(--blush1),var(--blush2));
+  padding:60px 40px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow: hidden;
+}
+
+.content{
+  text-align:center;
+  color:white;
+  opacity:0;
+  transform:scale(.95);
+  transition:opacity .6s ease, transform .6s ease;
+}
+
+.content.show{
+  opacity:1;
+  transform:scale(1);
+}
+
+h1{font-size:2rem;margin-bottom:20px;}
+.sub{margin-bottom:30px;opacity:.9;font-size: 1.5rem;}
+
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+button{
+  border:none;
+  padding:16px 30px;
+  border-radius:40px;
+  font-size:1.1rem;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+.yes{background:white;color:#ff6f9f;}
+.no{background:rgba(255,255,255,.5);color:white;}
+
+button:disabled{opacity:.7;cursor:not-allowed;}
+
+/* CONFETTI */
+.heart{
+  position:absolute;
+  top:-10px;
+  pointer-events:none;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh);opacity:0;}
+}
+
+/* FINAL MESSAGE */
+.final{
+  position:absolute;
+  text-align:center;
+  color:white;
+  font-size:2rem;
+  opacity:0;
+  transform:scale(.9);
+  transition:.6s ease;
+}
+
+.final.show{
+  opacity:1;
+  transform:scale(1);
+}
+
+.meme{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) scale(0);
+  opacity:0;
+  transition:transform .6s ease, opacity .6s ease;
+  width:80%;
+  max-width:400px;
+  text-align:center;
+}
+.meme.show{
+  opacity:1;
+  transform:translate(-50%, -50%) scale(1.2);
+}
+.meme img{
+  width:100%;
+  border-radius:20px;
+}
+</style>
+</head>
+<body>
+
+<div id="intro" class="intro"></div>
+
+<div class="wrapper">
+  <div class="content" id="content">
+    <h1>Will you be my ‘temporary’ Valentine?<br>
+    Strictly low commitment. High vibes. 😉</h1>
+    <div class="sub">Offer valid until midnight ONLY 😌🫵</div>
+
+    <div class="buttons">
+      <button class="yes" id="yesBtn">Yes 🌸</button>
+      <button class="no" id="noBtn">No 🙄</button>
+    </div>
+  </div>
+
+  <div class="final" id="finalText">Noice Choice!! 🤗</div>
+
+  <div class="meme" id="meme">
+    <!-- Replace GIF link below -->
+    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+  </div>
+</div>
+
+<script>
+/* INTRO */
+const introMsgs=["This is 4 u","papalu preethi 😁"];
+const intro=document.getElementById("intro");
+let i=0;
+
+function playIntro(){
+  if(i>=introMsgs.length){
+  const content=document.getElementById("content");
+  content.classList.add("show");
+  return;
+}
+  intro.textContent=introMsgs[i];
+  intro.classList.add("fadeIn");
+  setTimeout(()=>{
+    intro.classList.remove("fadeIn");
+    intro.classList.add("fadeOut");
+    setTimeout(()=>{
+      intro.classList.remove("fadeOut");
+      i++;playIntro();
+    },500);
+  },1500);
+}
+playIntro();
+
+/* CONFETTI */
+let interval;
+function startHearts(speed){
+  interval=setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💗";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=Math.random()*25+20+"px";
+    h.style.animationDuration=Math.random()*4+6+"s";
+    document.querySelector(".wrapper")?.appendChild(h);
+    setTimeout(()=>h.remove(),9000);
+  },speed);
+}
+function stopHearts(){clearInterval(interval);}
+startHearts(200);
+
+/* NO BUTTON */
+const noBtn=document.getElementById("noBtn");
+
+noBtn.addEventListener("click",()=>{
+  noBtn.disabled=true;
+  noBtn.textContent="😝";
+  noBtn.style.opacity="0";
+  setTimeout(()=>{noBtn.style.opacity="1";},100);
+  setTimeout(()=>{
+    noBtn.style.opacity="0";
+    setTimeout(()=>{
+      noBtn.textContent="No 🙄";
+      noBtn.style.opacity="1";
+      noBtn.disabled=false;
+    },500);
+  },1500);
+});
+
+/* YES BUTTON */
+const yesBtn=document.getElementById("yesBtn");
+yesBtn.addEventListener("click",()=>{
+  stopHearts();
+  document.getElementById("content").style.opacity="0";
+
+  setTimeout(()=>{
+    const final=document.getElementById("finalText");
+    final.classList.add("show");
+
+    setTimeout(()=>{
+      final.classList.remove("show");
+      setTimeout(()=>{
+        const meme=document.getElementById("meme");
+        meme.classList.add("show");
+      },500);
+    },1500);
+
+  },600);
+});
+</script>
+</body>
+</html>
