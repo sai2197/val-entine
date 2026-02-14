@@ -196,7 +196,11 @@ function playIntro(){
     },500);
   },1500);
 }
-playIntro();
+
+window.addEventListener("load", function() {
+  playIntro();
+});  
+//playIntro();
 
 /* CONFETTI */
 let interval;
